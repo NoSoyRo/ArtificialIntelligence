@@ -25,7 +25,6 @@ class ColaPrioridad():
         # siempre existe
         costoCompleto = costo + costoActual
         nodoColaPrioridadNodoHijo = NodoColaPrioridad(costoCompleto, nodoHijo) # Creamos nodo con especificaciones correctas
-        
         for elemento in self.cola:
             if elemento.costoAcumulado > nodoColaPrioridadNodoHijo.costoAcumulado:
                 self.cola.insert(self.cola.index(elemento), nodoColaPrioridadNodoHijo)

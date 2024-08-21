@@ -15,7 +15,7 @@ class ColaPrioridadVoraz(ColaPrioridad):
     def esVacia(self):
         val = len(self.cola) == 0
         return val
-    def agregaVoraz(self, nodoHijo: Nodo, nodoActual: Nodo):
+    def agregaVoraz(self, nodoHijo: Nodo):
         costo = self.busquedaHeuristica(nodoHijo)
         if len(self.cola) == 0:
             nodoColaPrioridadNodoHijo = NodoColaPrioridad(costo, nodoHijo)
@@ -30,7 +30,6 @@ class ColaPrioridadVoraz(ColaPrioridad):
                 return
         self.cola.append(nodoColaPrioridadNodoHijo)   
     def busquedaHeuristica(self, nodoActual):
-        print(self.heuristica)
         distancia = self.heuristica[nodoActual]
         if distancia == None:
             return -1

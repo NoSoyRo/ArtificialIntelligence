@@ -47,7 +47,31 @@ class TestBusquedaCostoUniforme(unittest.TestCase):
 
 
         grafo = GrafoVoraz(nodos, arcos, heuristica)
-        self.assertEqual(grafo.busquedaVoraz(A, C), 2)
+        self.assertEqual(grafo.busquedaVoraz(A, C), 0)
+
+    def test3Elemento(self):
+        # A -> B E = 2
+        # B -> C E = 2 
+        # A -> C E = 3
+
+        C = Nodo([], 'c')
+        B = Nodo([C], 'b')
+        D = Nodo([C], 'd')
+        A = Nodo([B, D], 'a')
+
+        nodos = [A,B,C,D]
+
+        arcos = dict()
+        arcos[(A,B)] = 1
+        arcos[(B,C)] = 1
+        arcos[(A,D)] = 3
+        arcos[(D,C)] = 3
+
+        heuristica = {A: 4, B: 10, C: 0, D: 2}
+
+
+        grafo = GrafoVoraz(nodos, arcos, heuristica)
+        self.assertEqual(grafo.busquedaVoraz(A, C), 0)
 
 if __name__ == '__main__':
     unittest.main()
