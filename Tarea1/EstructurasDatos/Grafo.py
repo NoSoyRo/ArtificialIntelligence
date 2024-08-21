@@ -1,11 +1,19 @@
 from EstructurasDatos.ColaPrioridad import ColaPrioridad
 from EstructurasDatos.Nodo import Nodo
+from EstructurasDatos.ColaPrioridadVoraz import ColaPrioridadVoraz
 
 class Grafo():
     def __init__(self, nodos: list, arcos: dict) -> None:
         self.nodos = nodos
         self.arcos = arcos
         self.frontera = ColaPrioridad(arcos)
+        self.fronteraVoraz = ColaPrioridadVoraz(arcos, {})
+    def inicializaFronteraBusquedaVoraz(self, nodoInicial: Nodo, heuristica: dict):
+        self.fronteraVoraz.heuristica = heuristica
+        for hijo in nodoInicial.expandeHijos():
+            nodoActual = self.nodos[self.nodos.index(nodoInicial)]
+            hijo.pathAMi.append(nodoInicial.nombre)
+            self.fronteraVoraz.agregaVoraz(hijo, nodoActual)
     def inicializaFronteraBusquedaCostoUniforme(self, nodoInicial: Nodo):
         for hijo in nodoInicial.expandeHijos():
             nodoActual = self.nodos[self.nodos.index(nodoInicial)]
@@ -32,4 +40,3 @@ class Grafo():
                     hijo.pathAMi = nodoActual.nodo.pathAMi.copy()
                     hijo.pathAMi.append(hijo.nombre)
                     self.frontera.agrega(hijo, nodoActual.nodo, nodoActual.costoAcumulado)
-
