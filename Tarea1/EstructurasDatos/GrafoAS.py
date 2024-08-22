@@ -7,7 +7,9 @@ class GrafoAS(GrafoVoraz):
         visitados = set()
         self.inicializaFronteraBusquedaAS(nodoInicial, self.heuristicas)
         encontreSolucion = False
-        nodoInicial.pathAMi = [nodoInicial.nombre]
+        nodoFinal.pathAMi = []
+        nodoFinal.pathAMiNombres = []
+        nodoFinal.costoOptimo = 0
         while encontreSolucion == False:
             if self.fronteraAS.esVacia():
                 return -1 # Failure code
@@ -16,12 +18,15 @@ class GrafoAS(GrafoVoraz):
             if nodoActual.nodo.nombre == nodoFinal.nombre: # cambiar a un objeto.equals(objeto)
                 encontreSolucion = True
                 nodoFinal.pathAMi = nodoActual.nodo.pathAMi.copy()
-                nodoFinal.pathAMi.append(nodoActual.nodo.nombre)
+                nodoFinal.pathAMi.append((nodoActual.nodo.nombre, nodoActual.nodo))
                 print(nodoFinal.pathAMi)
-                return nodoActual.costoAcumulado
+                nodoFinal.costoOptimo = 0 
+                for i in range(len(nodoFinal.pathAMi[1:])): 
+                    nodoFinal.costoOptimo = self.fronteraAS.busquedaCostoArco(nodoFinal.pathAMi[i][1], nodoFinal.pathAMi[i+1][1]) + nodoFinal.costoOptimo
+                return nodoFinal.costoOptimo
             if nodoActual not in visitados:
                 visitados.add(nodoActual)
                 for hijo in nodoActual.nodo.expandeHijos():
                     hijo.pathAMi = nodoActual.nodo.pathAMi.copy()
-                    hijo.pathAMi.append(nodoActual.nodo.nombre)
-                    self.fronteraAS.agregaVoraz(hijo, nodoActual.nodo)
+                    hijo.pathAMi.append((nodoActual.nodo.nombre, nodoActual.nodo))
+                    self.fronteraAS.agregaAS(hijo, nodoActual.nodo, nodoActual.costoAcumulado)

@@ -16,7 +16,9 @@ class ColaPrioridadAS(ColaPrioridadVoraz):
             return
         # siempre existe
         costoCompleto = costo + costoActual
+        # costoCompleto para la logica de la heuristica de A* y costoPath para sumar los valores del camino mas optimo en
         nodoColaPrioridadNodoHijo = NodoColaPrioridad(costoCompleto, nodoHijo) # Creamos nodo con especificaciones correctas
+        
         for elemento in self.cola:
             if elemento.costoAcumulado > nodoColaPrioridadNodoHijo.costoAcumulado:
                 self.cola.insert(self.cola.index(elemento), nodoColaPrioridadNodoHijo)

@@ -14,8 +14,8 @@ class Grafo():
         self.fronteraAS.heuristica = heuristica
         for hijo in nodoInicial.expandeHijos():
             nodoActual = self.nodos[self.nodos.index(nodoInicial)]
-            hijo.pathAMi.append(nodoInicial.nombre)
-            self.fronteraAS.agregaAS(hijo, nodoActual)
+            hijo.pathAMi.append((nodoInicial.nombre, nodoInicial))
+            self.fronteraAS.agregaAS(hijo, nodoActual, 0)
     def inicializaFronteraBusquedaVoraz(self, nodoInicial: Nodo, heuristica: dict):
         self.fronteraVoraz.heuristica = heuristica
         for hijo in nodoInicial.expandeHijos():
