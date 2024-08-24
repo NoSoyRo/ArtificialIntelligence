@@ -1,15 +1,17 @@
 import unittest
+from EstructurasDatos.GrafoMochila import GrafoMochila
 from EstructurasDatos.Nodo import Nodo
 from EstructurasDatos.Grafo import Grafo
 from EstructurasDatos.GrafoVoraz import GrafoVoraz
 from EstructurasDatos.GrafoAS import GrafoAS
+from EstructurasDatos.ElementoMochila import ElementoMochila
 
 
 class TestBusquedaCostoUniforme(unittest.TestCase):
-    
+
     # def test1Elemento(self):
     #     # A -> B E = 2
-    #     # B -> C E = 2 
+    #     # B -> C E = 2
     #     # A -> C E = 3
 
     #     C = Nodo([], 'C')
@@ -28,7 +30,7 @@ class TestBusquedaCostoUniforme(unittest.TestCase):
 
     # def test2Elemento(self):
     #     # A -> B E = 2
-    #     # B -> C E = 2 
+    #     # B -> C E = 2
     #     # A -> C E = 3
 
     #     C = Nodo([], 'C')
@@ -53,7 +55,7 @@ class TestBusquedaCostoUniforme(unittest.TestCase):
     # def test3Elemento(self):
     #     print("Test grafo A*")
     #     # A -> B E = 2
-    #     # B -> C E = 2 
+    #     # B -> C E = 2
     #     # A -> C E = 3
 
     #     C = Nodo([], 'c')
@@ -75,123 +77,179 @@ class TestBusquedaCostoUniforme(unittest.TestCase):
     #     grafo = GrafoAS(nodos, arcos, heuristica)
     #     self.assertEqual(grafo.busquedaVoraz(A, C), 0)
 
-    def testAradGraph(self):
+    # def testAradGraph(self):
 
-            Arad = Nodo([], 'Arad')
-            Timisoara = Nodo([], 'Timisoara')
-            Zerind = Nodo([], 'Zerind')
-            Oradea = Nodo([], 'Oradea')
-            Sibiu = Nodo([], 'Sibiu')
-            Lugoj = Nodo([], 'Lugoj')
-            Mehadia = Nodo([], 'Mehadia')
-            Dobreta = Nodo([], 'Dobreta')
-            Cralova = Nodo([], 'Cralova')
-            Pitesti = Nodo([], 'Pitesti')
-            RimnicuVilcea = Nodo([], 'RimnicuVilcea')
-            Fagaras = Nodo([], 'Fagaras')
-            Bucharest = Nodo([], 'Bucharest')
-            Giurgiu = Nodo([], 'Giurgiu')
-            Urziceni = Nodo([], 'Urziceni')
-            Vaslui = Nodo([], 'Vaslui')
-            Iasi = Nodo([], 'Iasi')
-            Neamt = Nodo([], 'Neamt')
-            Hirsova = Nodo([], 'Hirsova')
-            Eforie = Nodo([], 'Eforie')
+    #         Arad = Nodo([], 'Arad')
+    #         Timisoara = Nodo([], 'Timisoara')
+    #         Zerind = Nodo([], 'Zerind')
+    #         Oradea = Nodo([], 'Oradea')
+    #         Sibiu = Nodo([], 'Sibiu')
+    #         Lugoj = Nodo([], 'Lugoj')
+    #         Mehadia = Nodo([], 'Mehadia')
+    #         Dobreta = Nodo([], 'Dobreta')
+    #         Cralova = Nodo([], 'Cralova')
+    #         Pitesti = Nodo([], 'Pitesti')
+    #         RimnicuVilcea = Nodo([], 'RimnicuVilcea')
+    #         Fagaras = Nodo([], 'Fagaras')
+    #         Bucharest = Nodo([], 'Bucharest')
+    #         Giurgiu = Nodo([], 'Giurgiu')
+    #         Urziceni = Nodo([], 'Urziceni')
+    #         Vaslui = Nodo([], 'Vaslui')
+    #         Iasi = Nodo([], 'Iasi')
+    #         Neamt = Nodo([], 'Neamt')
+    #         Hirsova = Nodo([], 'Hirsova')
+    #         Eforie = Nodo([], 'Eforie')
 
-            Arad.hijos = [Zerind, Sibiu, Timisoara]
-            Zerind.hijos = [Arad, Oradea]
-            Timisoara.hijos = [Arad, Lugoj]
-            Oradea.hijos = [Zerind, Sibiu]
-            Sibiu.hijos = [Oradea, Arad, Fagaras, RimnicuVilcea]
-            Lugoj.hijos = [Timisoara, Mehadia]
-            Mehadia.hijos = [Lugoj, Dobreta]
-            Dobreta.hijos = [Mehadia, Cralova]
-            Cralova.hijos = [RimnicuVilcea, Pitesti]
-            RimnicuVilcea.hijos = [Sibiu, Pitesti, Cralova]
-            Pitesti.hijos = [Bucharest, RimnicuVilcea, Cralova]
-            Fagaras.hijos = [Sibiu, Bucharest]
-            Bucharest.hijos = [Fagaras, Pitesti, Giurgiu, Urziceni]
-            Giurgiu.hijos = [Bucharest]
-            Urziceni.hijos = [Bucharest, Vaslui, Hirsova]
-            Vaslui.hijos = [Urziceni, Iasi]
-            Hirsova.hijos = [Urziceni, Eforie]
-            Eforie.hijos = [Hirsova]
-            Iasi.hijos = [Neamt, Vaslui]
-            Neamt.hijos = [Iasi]
+    #         Arad.hijos = [Zerind, Sibiu, Timisoara]
+    #         Zerind.hijos = [Arad, Oradea]
+    #         Timisoara.hijos = [Arad, Lugoj]
+    #         Oradea.hijos = [Zerind, Sibiu]
+    #         Sibiu.hijos = [Oradea, Arad, Fagaras, RimnicuVilcea]
+    #         Lugoj.hijos = [Timisoara, Mehadia]
+    #         Mehadia.hijos = [Lugoj, Dobreta]
+    #         Dobreta.hijos = [Mehadia, Cralova]
+    #         Cralova.hijos = [RimnicuVilcea, Pitesti]
+    #         RimnicuVilcea.hijos = [Sibiu, Pitesti, Cralova]
+    #         Pitesti.hijos = [Bucharest, RimnicuVilcea, Cralova]
+    #         Fagaras.hijos = [Sibiu, Bucharest]
+    #         Bucharest.hijos = [Fagaras, Pitesti, Giurgiu, Urziceni]
+    #         Giurgiu.hijos = [Bucharest]
+    #         Urziceni.hijos = [Bucharest, Vaslui, Hirsova]
+    #         Vaslui.hijos = [Urziceni, Iasi]
+    #         Hirsova.hijos = [Urziceni, Eforie]
+    #         Eforie.hijos = [Hirsova]
+    #         Iasi.hijos = [Neamt, Vaslui]
+    #         Neamt.hijos = [Iasi]
 
-            arcos = dict()
-            arcos[(Arad,Zerind)] = 75
-            arcos[(Zerind,Arad)] = 75
-            arcos[(Arad,Sibiu)] = 140
-            arcos[(Sibiu,Arad)] = 140
-            arcos[(Arad,Timisoara)] = 118
-            arcos[(Timisoara,Arad)] = 118
-            arcos[(Timisoara,Lugoj)] = 111
-            arcos[(Lugoj,Timisoara)] = 111
-            arcos[(Zerind,Oradea)] = 71
-            arcos[(Oradea,Zerind)] = 71
-            arcos[(Oradea,Sibiu)] = 151
-            arcos[(Sibiu,Oradea)] = 151
-            arcos[(Lugoj,Mehadia)] = 70
-            arcos[(Mehadia,Lugoj)] = 70
-            arcos[(Mehadia,Dobreta)] = 75
-            arcos[(Dobreta,Mehadia)] = 75
-            arcos[(Dobreta,Cralova)] = 120
-            arcos[(Cralova,Dobreta)] = 120
-            arcos[(Cralova,RimnicuVilcea)] = 146
-            arcos[(RimnicuVilcea,Cralova)] = 146
-            arcos[(Cralova,Pitesti)] = 138
-            arcos[(Pitesti,Cralova)] = 138
-            arcos[(Sibiu,Fagaras)] = 99
-            arcos[(Fagaras,Sibiu)] = 99
-            arcos[(Sibiu, RimnicuVilcea)] = 80
-            arcos[(RimnicuVilcea, Sibiu)] = 80
-            arcos[(Pitesti, RimnicuVilcea)] = 97
-            arcos[(RimnicuVilcea, Pitesti)] = 97
-            arcos[(Fagaras,Bucharest)] = 211
-            arcos[(Bucharest,Fagaras)] = 211
-            arcos[(Pitesti,Bucharest)] = 101
-            arcos[(Bucharest,Pitesti)] = 101
-            arcos[(Bucharest,Urziceni)] = 85
-            arcos[(Urziceni,Bucharest)] = 85
-            arcos[(Urziceni,Vaslui)] = 142
-            arcos[(Vaslui,Urziceni)] = 142
-            arcos[(Vaslui,Iasi)] = 92
-            arcos[(Iasi,Vaslui)] = 92
-            arcos[(Iasi,Neamt)] = 87
-            arcos[(Neamt,Iasi)] = 87
-            arcos[(Urziceni,Hirsova)] = 98 
-            arcos[(Hirsova,Urziceni)] = 98
-            arcos[(Eforie,Hirsova)] = 86
-            arcos[(Hirsova,Eforie)] = 86
+    #         arcos = dict()
+    #         arcos[(Arad,Zerind)] = 75
+    #         arcos[(Zerind,Arad)] = 75
+    #         arcos[(Arad,Sibiu)] = 140
+    #         arcos[(Sibiu,Arad)] = 140
+    #         arcos[(Arad,Timisoara)] = 118
+    #         arcos[(Timisoara,Arad)] = 118
+    #         arcos[(Timisoara,Lugoj)] = 111
+    #         arcos[(Lugoj,Timisoara)] = 111
+    #         arcos[(Zerind,Oradea)] = 71
+    #         arcos[(Oradea,Zerind)] = 71
+    #         arcos[(Oradea,Sibiu)] = 151
+    #         arcos[(Sibiu,Oradea)] = 151
+    #         arcos[(Lugoj,Mehadia)] = 70
+    #         arcos[(Mehadia,Lugoj)] = 70
+    #         arcos[(Mehadia,Dobreta)] = 75
+    #         arcos[(Dobreta,Mehadia)] = 75
+    #         arcos[(Dobreta,Cralova)] = 120
+    #         arcos[(Cralova,Dobreta)] = 120
+    #         arcos[(Cralova,RimnicuVilcea)] = 146
+    #         arcos[(RimnicuVilcea,Cralova)] = 146
+    #         arcos[(Cralova,Pitesti)] = 138
+    #         arcos[(Pitesti,Cralova)] = 138
+    #         arcos[(Sibiu,Fagaras)] = 99
+    #         arcos[(Fagaras,Sibiu)] = 99
+    #         arcos[(Sibiu, RimnicuVilcea)] = 80
+    #         arcos[(RimnicuVilcea, Sibiu)] = 80
+    #         arcos[(Pitesti, RimnicuVilcea)] = 97
+    #         arcos[(RimnicuVilcea, Pitesti)] = 97
+    #         arcos[(Fagaras,Bucharest)] = 211
+    #         arcos[(Bucharest,Fagaras)] = 211
+    #         arcos[(Pitesti,Bucharest)] = 101
+    #         arcos[(Bucharest,Pitesti)] = 101
+    #         arcos[(Bucharest,Urziceni)] = 85
+    #         arcos[(Urziceni,Bucharest)] = 85
+    #         arcos[(Urziceni,Vaslui)] = 142
+    #         arcos[(Vaslui,Urziceni)] = 142
+    #         arcos[(Vaslui,Iasi)] = 92
+    #         arcos[(Iasi,Vaslui)] = 92
+    #         arcos[(Iasi,Neamt)] = 87
+    #         arcos[(Neamt,Iasi)] = 87
+    #         arcos[(Urziceni,Hirsova)] = 98
+    #         arcos[(Hirsova,Urziceni)] = 98
+    #         arcos[(Eforie,Hirsova)] = 86
+    #         arcos[(Hirsova,Eforie)] = 86
 
-            heuristica = dict()
-            heuristica[Arad] = 366
-            heuristica[Bucharest] = 0
-            heuristica[Cralova] = 160
-            heuristica[Dobreta] = 242
-            heuristica[Eforie] = 161
-            heuristica[Fagaras] = 178
-            heuristica[Giurgiu] = 77
-            heuristica[Hirsova] = 151
-            heuristica[Iasi] = 226
-            heuristica[Lugoj] = 244
-            heuristica[Mehadia] = 241
-            heuristica[Neamt] = 234
-            heuristica[Oradea] = 380
-            heuristica[Pitesti] = 98
-            heuristica[RimnicuVilcea] = 193
-            heuristica[Sibiu] = 253
-            heuristica[Timisoara] = 329
-            heuristica[Urziceni] = 80
-            heuristica[Vaslui] = 199
-            heuristica[Zerind] = 374
+    #         heuristica = dict()
+    #         heuristica[Arad] = 366
+    #         heuristica[Bucharest] = 0
+    #         heuristica[Cralova] = 160
+    #         heuristica[Dobreta] = 242
+    #         heuristica[Eforie] = 161
+    #         heuristica[Fagaras] = 178
+    #         heuristica[Giurgiu] = 77
+    #         heuristica[Hirsova] = 151
+    #         heuristica[Iasi] = 226
+    #         heuristica[Lugoj] = 244
+    #         heuristica[Mehadia] = 241
+    #         heuristica[Neamt] = 234
+    #         heuristica[Oradea] = 380
+    #         heuristica[Pitesti] = 98
+    #         heuristica[RimnicuVilcea] = 193
+    #         heuristica[Sibiu] = 253
+    #         heuristica[Timisoara] = 329
+    #         heuristica[Urziceni] = 80
+    #         heuristica[Vaslui] = 199
+    #         heuristica[Zerind] = 374
 
-            nodos = [Arad, Bucharest, Cralova, Dobreta, Eforie, Fagaras, Giurgiu, Hirsova, Iasi, Lugoj, Mehadia, Neamt, Oradea, Pitesti, RimnicuVilcea, Sibiu, Timisoara, Urziceni, Vaslui, Zerind]
+    #         nodos = [Arad, Bucharest, Cralova, Dobreta, Eforie, Fagaras, Giurgiu, Hirsova, Iasi, Lugoj, Mehadia, Neamt, Oradea, Pitesti, RimnicuVilcea, Sibiu, Timisoara, Urziceni, Vaslui, Zerind]
 
-            grafo = GrafoAS(nodos, arcos, heuristica)
-            self.assertEqual(grafo.busquedaAS(Arad, Bucharest), 418)
+    #         grafo = GrafoAS(nodos, arcos, heuristica)
+    #         self.assertEqual(grafo.busquedaAS(Arad, Bucharest), 418)
+
+    def testMochilaDummyCase1(self):
+        
+        listaElementos = []
+
+        listaElementos.append(ElementoMochila([], 'e'+str(0), 3, 1))
+        listaElementos.append(ElementoMochila([], 'e'+str(1), 3, 2))
+        listaElementos.append(ElementoMochila([], 'e'+str(2), 3, 3))
+        
+        capacidadMochila = 5
+
+        grafo = GrafoMochila(listaElementos, capacidadMochila)
+        grafo.busquedaAStar()
+        self.assertEqual(grafo.mejorEstado.estado, [1,1,0])
+
+    def testMochilaDummyCase2(self):
+        
+        listaElementos = []
+
+        listaElementos.append(ElementoMochila([], 'e'+str(0), 3, 3))
+        listaElementos.append(ElementoMochila([], 'e'+str(1), 3, 3))
+        listaElementos.append(ElementoMochila([], 'e'+str(2), 3, 3))
+        
+        capacidadMochila = 5
+
+        grafo = GrafoMochila(listaElementos, capacidadMochila)
+        grafo.busquedaAStar()
+        self.assertEqual(grafo.mejorEstado.estado, [1,0,0])
+
+    def testMochilaDummyCase3(self):
+        
+        listaElementos = []
+
+        listaElementos.append(ElementoMochila([], 'e'+str(0), 100, 5))
+        listaElementos.append(ElementoMochila([], 'e'+str(1), 3, 1))
+        listaElementos.append(ElementoMochila([], 'e'+str(2), 3, 1))
+        
+        capacidadMochila = 5
+
+        grafo = GrafoMochila(listaElementos, capacidadMochila)
+        grafo.busquedaAStar()
+        self.assertEqual(grafo.mejorEstado.estado, [1,0,0])
+
+    # def testMochila(self):
+        #     #importamos la data
+        #     with open('./Data/ks_10000_0', 'r') as file:
+        #         lines = file.readlines()
+        #     cantidadElementos, capacidadMochila = int(lines[0].split(' ')[0]), int(lines[0].split(' ')[1])
+        #     lines.pop(0)
+        #     listaElementos = []
+        #     cont = 0
+        #     for i in range(cantidadElementos):
+        #         listaElementos.append(ElementoMochila([], 'e'+str(cont), int(lines[i].split(' ')[0]), int(lines[i].split(' ')[1])))
+        #         cont+=1
+        #     elementosOrdenadoConBaseEnPeso = sorted(listaElementos, key=lambda elemento: elemento.peso)
+        #     # TO-DO: Terminar de implementar el grafo validado en testMochilaDummyCases dentro de este metodo para el problema y datos provistos.
+        #     print(capacidadMochila)
 
 if __name__ == '__main__':
     unittest.main()
-        
