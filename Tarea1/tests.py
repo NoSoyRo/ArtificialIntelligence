@@ -5,6 +5,9 @@ from EstructurasDatos.Grafo import Grafo
 from EstructurasDatos.GrafoVoraz import GrafoVoraz
 from EstructurasDatos.GrafoAS import GrafoAS
 from EstructurasDatos.ElementoMochila import ElementoMochila
+from datetime import datetime
+from EstructurasDatos.Ayudante import Ayudante
+
 
 
 class TestBusquedaCostoUniforme(unittest.TestCase):
@@ -194,62 +197,113 @@ class TestBusquedaCostoUniforme(unittest.TestCase):
     #         grafo = GrafoAS(nodos, arcos, heuristica)
     #         self.assertEqual(grafo.busquedaAS(Arad, Bucharest), 418)
 
-    def testMochilaDummyCase1(self):
+    # def testMochilaDummyCase1(self):
         
-        listaElementos = []
+    #     listaElementos = []
 
-        listaElementos.append(ElementoMochila([], 'e'+str(0), 3, 1))
-        listaElementos.append(ElementoMochila([], 'e'+str(1), 3, 2))
-        listaElementos.append(ElementoMochila([], 'e'+str(2), 3, 3))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(0), 3, 1))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(1), 3, 2))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(2), 3, 3))
         
-        capacidadMochila = 5
+    #     capacidadMochila = 5
 
-        grafo = GrafoMochila(listaElementos, capacidadMochila)
-        grafo.busquedaAStar()
-        self.assertEqual(grafo.mejorEstado.estado, [1,1,0])
+    #     grafo = GrafoMochila(listaElementos, capacidadMochila)
+    #     grafo.busquedaAStar()
+    #     self.assertEqual(grafo.mejorEstado.estado, [1,1,0])
 
-    def testMochilaDummyCase2(self):
+    # def testMochilaDummyCase2(self):
         
-        listaElementos = []
+    #     listaElementos = []
 
-        listaElementos.append(ElementoMochila([], 'e'+str(0), 3, 3))
-        listaElementos.append(ElementoMochila([], 'e'+str(1), 3, 3))
-        listaElementos.append(ElementoMochila([], 'e'+str(2), 3, 3))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(0), 3, 3))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(1), 3, 3))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(2), 3, 3))
         
-        capacidadMochila = 5
+    #     capacidadMochila = 5
 
-        grafo = GrafoMochila(listaElementos, capacidadMochila)
-        grafo.busquedaAStar()
-        self.assertEqual(grafo.mejorEstado.estado, [1,0,0])
+    #     grafo = GrafoMochila(listaElementos, capacidadMochila)
+    #     grafo.busquedaAStar()
+    #     self.assertEqual(grafo.mejorEstado.estado, [1,0,0])
 
-    def testMochilaDummyCase3(self):
+    # def testMochilaDummyCase3(self):
         
-        listaElementos = []
+    #     listaElementos = []
 
-        listaElementos.append(ElementoMochila([], 'e'+str(0), 100, 5))
-        listaElementos.append(ElementoMochila([], 'e'+str(1), 3, 1))
-        listaElementos.append(ElementoMochila([], 'e'+str(2), 3, 1))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(0), 100, 5))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(1), 3, 1))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(2), 3, 1))
         
-        capacidadMochila = 5
+    #     capacidadMochila = 5
 
-        grafo = GrafoMochila(listaElementos, capacidadMochila)
-        grafo.busquedaAStar()
-        self.assertEqual(grafo.mejorEstado.estado, [1,0,0])
+    #     grafo = GrafoMochila(listaElementos, capacidadMochila)
+    #     grafo.busquedaAStar()
+    #     self.assertEqual(grafo.mejorEstado.estado, [1,0,0])
 
-    # def testMochila(self):
-        #     #importamos la data
-        #     with open('./Data/ks_10000_0', 'r') as file:
-        #         lines = file.readlines()
-        #     cantidadElementos, capacidadMochila = int(lines[0].split(' ')[0]), int(lines[0].split(' ')[1])
-        #     lines.pop(0)
-        #     listaElementos = []
-        #     cont = 0
-        #     for i in range(cantidadElementos):
-        #         listaElementos.append(ElementoMochila([], 'e'+str(cont), int(lines[i].split(' ')[0]), int(lines[i].split(' ')[1])))
-        #         cont+=1
-        #     elementosOrdenadoConBaseEnPeso = sorted(listaElementos, key=lambda elemento: elemento.peso)
-        #     # TO-DO: Terminar de implementar el grafo validado en testMochilaDummyCases dentro de este metodo para el problema y datos provistos.
-        #     print(capacidadMochila)
+    # def testMochilaDummyCase4(self):
+        
+    #     listaElementos = []
+
+    #     listaElementos.append(ElementoMochila([], 'e'+str(0), 1, 1))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(1), 1, 1))
+    #     listaElementos.append(ElementoMochila([], 'e'+str(2), 1, 1))
+        
+    #     capacidadMochila = 5
+
+    #     grafo = GrafoMochila(listaElementos, capacidadMochila)
+    #     grafo.busquedaAStarOptim()
+    #     self.assertEqual(grafo.mejorEstado.estado, [1,1,1])
+
+    def testMochila10k(self):
+            #importamos la data
+            Ayudante.loggeaTexto("INICIA EL PROCESO DE TESTEO")
+            Ayudante.loggeaTexto("Importamos data")
+            with open('./Data/ks_10000_0', 'r') as file:
+                lines = file.readlines()
+            cantidadElementos, capacidadMochila = int(lines[0].split(' ')[0]), int(lines[0].split(' ')[1])
+            lines.pop(0)
+            listaElementos = []
+            cont = 0
+            for i in range(cantidadElementos):
+                listaElementos.append(ElementoMochila([], 'e'+str(cont), int(lines[i].split(' ')[0]), int(lines[i].split(' ')[1])))
+                cont+=1
+            Ayudante.loggeaTexto("Sort inicial de la data")
+            elementosOrdenadoConBaseEnPeso = sorted(listaElementos, key=lambda elemento: elemento.peso)
+            Ayudante.loggeaTexto("Grafo inicializacion")
+            grafo = GrafoMochila(elementosOrdenadoConBaseEnPeso, capacidadMochila)
+            Ayudante.loggeaTexto("Inicia Busqueda//////////////////////////////////")
+            grafo.busquedaAStar()
+            Ayudante.loggeaTexto("Finaliza Busqueda//////////////////////////////////")
+
+            print(grafo.mejorEstado.estado)
+
+    # def testMochila19(self):
+    #         #importamos la data
+    #         timestamp_actual = datetime.now()
+    #         fecha_formateada = timestamp_actual.strftime("%Y-%m-%d %H:%M:%S")
+    #         print('iniciamos proceso a las: ' + str(fecha_formateada))
+    #         with open('./Data/ks_19_0', 'r') as file:
+    #             lines = file.readlines()
+    #         cantidadElementos, capacidadMochila = int(lines[0].split(' ')[0]), int(lines[0].split(' ')[1])
+    #         lines.pop(0)
+    #         listaElementos = []
+    #         cont = 0
+    #         for i in range(cantidadElementos):
+    #             listaElementos.append(ElementoMochila([], 'e'+str(cont), int(lines[i].split(' ')[0]), int(lines[i].split(' ')[1])))
+    #             cont+=1
+    #         elementosOrdenadoConBaseEnPeso = sorted(listaElementos, key=lambda elemento: elemento.peso)
+    #         grafo = GrafoMochila(elementosOrdenadoConBaseEnPeso, capacidadMochila)
+    #         grafo.busquedaAStar()
+    #         timestamp_actual = datetime.now()
+    #         fecha_formateada = timestamp_actual.strftime("%Y-%m-%d %H:%M:%S")
+    #         print('fin proceso a las: ' + str(fecha_formateada))
+    #         print(grafo.mejorEstado.estado)
+    #         l1 = [i.peso for i in elementosOrdenadoConBaseEnPeso]
+    #         l2 = [i.valor for i in elementosOrdenadoConBaseEnPeso]
+    #         print('peso: '+str(l1))
+    #         print('valor: '+str(l2))
+    #         print('capacidad: '+str(capacidadMochila))
+
+
 
 if __name__ == '__main__':
     unittest.main()
