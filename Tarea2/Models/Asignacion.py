@@ -3,45 +3,53 @@ class Asignaciones():
         self.asignaciones = set()
 
     # ESTO ES SOLO CODIGO QUE TIENE QUE VER CON LA ASIGNACION DEL MODELADO DEL PROBLEMA DE N REINAS
-    def agrega(self, variablePorAgregar, variables):
-        if self.asignaciones != set():
-            self.asignaciones.add(variablePorAgregar) ## Ojo la variable ya debe traer el valor asignado != nulo
-            return
+    def agrega(self, variablePorAgregar, variables: list):
         for variable in variables:
-            self.agregaRestriccion(variablePorAgregar, variable)
+            if variable != variablePorAgregar:
+                self.agregaRestriccion(variablePorAgregar, variable)
         self.asignaciones.add(variablePorAgregar)
         
     def agregaRestriccion(self, variablePorAgregar, variable):
         # Horizontal
-        variable.valoresAdmisibles.remove(variablePorAgregar.valor)
+        variable.restricciones.add(variablePorAgregar.valor)
         a = abs(variable.columna - variablePorAgregar.columna)
         # Diagonales encima
-        if variable.valor + a <= variable.columna: 
-            variable.restricciones.add(variable.valor + a)
+        aux = variablePorAgregar.valor + a <= variable.tamanioTablero
+        if aux: 
+            variable.restricciones.add(variablePorAgregar.valor + a)
         # Diagonales debajo
-        if variable.valor - a > 0: 
-            variable.restricciones.add(variable.valor + a)
+        if variablePorAgregar.valor - a > 0: 
+            variable.restricciones.add(variablePorAgregar.valor - a)
+        # No te olvides que al terminar actualizar los valores admisibles porque actualizaste restricciones y solo debes calcyular D - Restricciones uvu
         variable.creaValoresAdmisibles()
 
 
     def elimina(self, variablePorEliminar, variables):
-        if self.asignaciones != set():
-            self.asignaciones.add(variablePorEliminar) ## Ojo la variable ya debe traer el valor asignado != nulo
-            return
         for variable in variables:
             self.eliminaRestriccion(variablePorEliminar, variable)
         self.asignaciones.remove(variablePorEliminar)
+        for i in self.asignaciones:
+            self.agrega(i, variables)
+        print("checkpoint")
     
-    def eliminaRestriccion(variablePorEliminar, variable):
+    def eliminaRestriccion(self, variablePorEliminar, variable):
         # Horizontal
-        variable.valoresAdmisibles.remove(variablePorEliminar.valor)
+        variable.restricciones.remove(variablePorEliminar.valor)
         a = abs(variable.columna - variablePorEliminar.columna)
         # Diagonales encima
-        if variable.valor + a <= variable.columna: 
-            variable.restricciones.pop(variable.valor + a)
+        aux = variablePorEliminar.valor + a <= variable.tamanioTablero
+        if aux: 
+            variable.restricciones.remove(variablePorEliminar.valor + a)
         # Diagonales debajo
-        if variable.valor - a > 0: 
-            variable.restricciones.pop(variable.valor + a)
+        if variablePorEliminar.valor - a > 0: 
+            variable.restricciones.remove(variablePorEliminar.valor - a)
+        # No te olvides que al terminar actualizar los valores admisibles porque actualizaste restricciones y solo debes calcyular D - Restricciones uvu
         variable.creaValoresAdmisibles()
     # AQUI TERMINA
+
+    def __str__(self) -> str:
+        string = ''
+        for i in self.asignaciones:
+            string += '|' + str(i.valor) + '-' + str(i.columna) + '|'
+        return(string)
 
