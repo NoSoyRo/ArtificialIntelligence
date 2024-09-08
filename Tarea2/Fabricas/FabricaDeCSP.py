@@ -7,11 +7,10 @@ class FabricaDeCSP():
     def creaCSP(self):
         return CSP.CSP(self.creaVariables())
     def creaVariables(self):
-        conjVariables = []
+        listaVariables = []
         dominioComun = set([i for i in range(1, self.nReinas + 1)])
         for i in range(self.nReinas):
             variableI = Variable.Variable(0, dominioComun, i)
-            conjVariables.append(variableI)
-        return conjVariables
-
+            listaVariables.append(variableI)
+        return listaVariables
         
