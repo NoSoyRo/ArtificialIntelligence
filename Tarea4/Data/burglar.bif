@@ -1,0 +1,37 @@
+network burglar_network {
+}
+variable Burglar {
+    type discrete [2] { true, false };
+}
+variable Earthquake {
+    type discrete [2] { true, false };
+}
+variable Alarm {
+    type discrete [2] { true, false };
+}
+variable JohnCalls {
+    type discrete [2] { true, false };
+}
+variable MaryCalls {
+    type discrete [2] { true, false };
+}
+probability (Burglar) {
+    table 0.001, 0.999;
+}
+probability (Earthquake) {
+    table 0.002, 0.998;
+}
+probability (Alarm | Burglar, Earthquake) {
+    (true, true) 0.95, 0.05;
+    (true, false) 0.94, 0.06;
+    (false, true) 0.29, 0.71;
+    (false, false) 0.001, 0.999;
+}
+probability (JohnCalls | Alarm) {
+    (true) 0.9, 0.1;
+    (false) 0.05, 0.95;
+}
+probability (MaryCalls | Alarm) {
+    (true) 0.7, 0.3;
+    (false) 0.01, 0.95;
+}

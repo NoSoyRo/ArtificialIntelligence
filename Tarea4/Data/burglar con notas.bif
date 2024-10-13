@@ -1,0 +1,50 @@
+network burglar_network {
+}
+
+variable Burglar {
+    type discrete [2] { true, false };
+}
+
+variable Earthquake {
+    type discrete [2] { true, false };
+}
+
+variable Alarm {
+    type discrete [2] { true, false };
+}
+
+variable JohnCalls {
+    type discrete [2] { true, false };
+}
+
+variable MaryCalls {
+    type discrete [2] { true, false };
+}
+
+probability (Burglar) {
+    table 0.001, 0.999;  // P(Burglar = true) = 0.1, P(Burglar = false) = 0.9
+}
+
+probability (Earthquake) {
+    table 0.002, 0.998;  // P(Earthquake = true) = 0.2, P(Earthquake = false) = 0.8
+}
+
+probability (Alarm | Burglar, Earthquake) {
+    table
+        0.95, 0.05,  // P(Alarm = true | Burglar = true, Earthquake = true) | P(Alarm = false | Burglar = true, Earthquake = true)
+        0.94, 0.06,  // P(Alarm = true | Burglar = true, Earthquake = false) | P(Alarm = false | Burglar = true, Earthquake = false)
+        0.29, 0.71,  // P(Alarm = true | Burglar = false, Earthquake = true) | P(Alarm = false | Burglar = false, Earthquake = true)
+        0.001, 0.999; // P(Alarm = true | Burglar = false, Earthquake = false) | P(Alarm = false | Burglar = false, Earthquake = false)
+}
+
+probability (JohnCalls | Alarm) {
+    table
+        0.9, 0.1,  // P(JohnCalls = true | Alarm = true) | P(JohnCalls = false | Alarm = true)
+        0.05, 0.95;    // P(JohnCalls = true | Alarm = false) | P(JohnCalls = false | Alarm = false)
+}
+
+probability (MaryCalls | Alarm) {
+    table
+        0.7, 0.3,  // P(MaryCalls = true | Alarm = true) | P(MaryCalls = false | Alarm = true)
+        0.01, 0.95;  // P(MaryCalls = true | Alarm = false) | P(MaryCalls = false | Alarm = false)
+}
