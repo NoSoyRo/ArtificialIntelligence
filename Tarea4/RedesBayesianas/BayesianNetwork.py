@@ -1,3 +1,5 @@
+from itertools import product
+
 class BayesianNetwork:
     def __init__(self):
         self.variables = {}  # Almacena variables y sus valores posibles
@@ -75,75 +77,65 @@ class BayesianNetwork:
                     return True  # Camino bloqueado
         return False  # Camino no bloqueado
     
-    # --- Métodos para inferencia mediante eliminación de variables ---
-    
-    def restrict_factor(self, factor, variable, value):
-        restricted_factor = {}
-        for assignment, prob in factor.items():
-            if assignment[variable] == value:
-                new_assignment = assignment.copy()
-                del new_assignment[variable]
-                restricted_factor[tuple(new_assignment.items())] = prob
-        return restricted_factor
-
-    def multiply_factors(self, factor1, factor2):
-        common_vars = set(factor1.keys()) & set(factor2.keys())
-        result_factor = {}
-        for assignment1, prob1 in factor1.items():
-            for assignment2, prob2 in factor2.items():
-                if all(assignment1[var] == assignment2[var] for var in common_vars):
-                    new_assignment = {**assignment1, **assignment2}
-                    result_factor[tuple(new_assignment.items())] = prob1 * prob2
-        return result_factor
-
-    def marginalize_factor(self, factor, variable):
-        marginalized_factor = {}
-        for assignment, prob in factor.items():
-            new_assignment = assignment.copy()
-            del new_assignment[variable]
-            marginalized_factor[tuple(new_assignment.items())] = marginalized_factor.get(new_assignment, 0) + prob
-        return marginalized_factor
-
-    def normalize(self, factor):
-        total_prob = sum(factor.values())
-        return {k: v / total_prob for k, v in factor.items()}
+    # --- Métodos para inferencia mediante busqueda exaustiva ---
 
     def inference(self, query, evidence):
-        variables = set(self.variables.keys())
-        query_var = query
-        factors = []
+        # Paso 1: Obtener todas las variables no observadas
+        hidden_vars = set(self.variables.keys()) - set(evidence.keys()) - {query}
+
+        # Paso 2: Enumerar todas las posibles asignaciones de valores para las variables ocultas
+        hidden_var_combinations = list(product(*[self.variables[var] for var in hidden_vars]))
+
+        # Paso 3: Sumar las probabilidades conjuntas para las distintas asignaciones
+        true_prob = 0.0
+        false_prob = 0.0
         
-        # Paso 1: Restricción de factores por la evidencia
-        for var, cpt in self.probabilities.items():
-            factor = self.create_factor(var, cpt)
-            for ev_var, ev_val in evidence.items():
-                if ev_var in factor:
-                    factor = self.restrict_factor(factor, ev_var, ev_val)
-            factors.append(factor)
+        for assignment in hidden_var_combinations:
+            # Crear un diccionario que contenga la evidencia, la consulta y la asignación actual
+            full_assignment = {query: 'True'}  # Consulta para 'query=True'
+            full_assignment.update(evidence)
+            full_assignment.update({var: val for var, val in zip(hidden_vars, assignment)})
+            
+            # Calcular la probabilidad conjunta para esta asignación
+            prob = self.joint_probability(full_assignment)
+            true_prob += prob
+            
+            # Ahora considerar la consulta para 'query=False'
+            full_assignment[query] = 'False'
+            prob = self.joint_probability(full_assignment)
+            false_prob += prob
+
+        # Paso 4: Normalizar los resultados
+        total_prob = true_prob + false_prob
+        normalized_false_prob = true_prob / total_prob if total_prob > 0 else 0
+        normalized_true_prob = false_prob / total_prob if total_prob > 0 else 0
+
+        return {query: {"True": normalized_true_prob, "False": normalized_false_prob}}
+
+    def joint_probability(self, assignment):
+        joint_prob = 1.0
         
-        # Paso 2: Eliminación de variables no relacionadas
-        hidden_vars = variables - set([query_var]) - set(evidence.keys())
-        for hidden_var in hidden_vars:
-            # Multiplicar todos los factores que contengan la variable oculta
-            related_factors = [f for f in factors if hidden_var in f]
-            new_factor = related_factors[0]
-            for factor in related_factors[1:]:
-                new_factor = self.multiply_factors(new_factor, factor)
-            # Marginalizar la variable oculta
-            marginalized_factor = self.marginalize_factor(new_factor, hidden_var)
-            # Actualizar la lista de factores
-            factors = [f for f in factors if hidden_var not in f] + [marginalized_factor]
-        
-        # Paso 3: Multiplicar factores restantes
-        final_factor = factors[0]
-        for factor in factors[1:]:
-            final_factor = self.multiply_factors(final_factor, factor)
-        
-        # Paso 4: Normalización
-        return self.normalize(final_factor)
-    
-    def create_factor(self, variable, cpt):
-        factor = {}
-        for assignment, prob in cpt.items():
-            factor[assignment] = prob  # Usa assignment directamente como la clave
-        return factor
+        # Para cada variable, multiplicamos la probabilidad condicional
+        for var, value in assignment.items():
+            parents = self.dependencies.get(var, [])
+            parent_assignment = tuple(assignment[parent] for parent in parents)  # Asignación de los padres
+
+            cpt = self.probabilities.get(var)
+
+            # Asegurarse de que la asignación de los padres esté formateada correctamente
+            if len(parents) == 0:  # Caso sin padres
+                prob = cpt.get(())  # No hay condicionamiento, usar la tabla directamente
+            else:
+                prob = cpt.get(parent_assignment)  # Obtener la probabilidad condicional para la asignación
+            
+            # Verificamos si prob es None
+            if prob is None:
+                raise ValueError(f"No se encontró la probabilidad para {var} con padres {parent_assignment}.")
+
+            # Verificar si estamos evaluando para 'True' o 'False'
+            if value in [True, 'true']:  # Tratar 'True' como 'true'
+                joint_prob *= prob[0]  # Probabilidad para 'true'
+            else:
+                joint_prob *= prob[1]  # Probabilidad para 'false'
+
+        return joint_prob
