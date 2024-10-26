@@ -5,7 +5,61 @@ from src.Fabricas import FabricaDeTablas
 from src.Modelos import RegresionLinealSalarios
 from src.Modelos import NeuralNetwork
 from src.Modelos import KMeans
+# import gymnasium as gym
+from src.Modelos import QLearning
 
+
+def train_agent(episodes):
+    # Definir el mapa
+    map_string = """
+    SFFF
+    FHFF
+    FHFH
+    FFFG
+    """
+    env = QLearning.FrozenLake(map_string)
+    agent = QLearning.QLearningAgent(state_size=env.n_rows * env.n_cols, action_size=4)
+
+    for episode in range(episodes):
+        state = env.reset()
+        done = False
+
+        while not done:
+            action = agent.choose_action(state)
+            next_state, reward, done = env.step(action)
+            agent.update_q_value(state, action, reward, next_state)
+            state = next_state
+        
+        agent.decay_exploration()
+        if episode % 100 == 0:
+            print(f'Episode: {episode}, Exploration Rate: {agent.exploration_rate:.4f}')
+
+    return agent
+
+def test_agent(agent, episodes):
+    map_string = """
+    SFFF
+    FHFF
+    FHFH
+    FFFG
+    """
+    env = QLearning.FrozenLake(map_string)
+    total_rewards = 0
+
+    for episode in range(episodes):
+        state = env.reset()
+        done = False
+        episode_reward = 0
+
+        while not done:
+            action = np.argmax(agent.q_table[state])  # Explotar
+            next_state, reward, done = env.step(action)
+            episode_reward += reward
+            state = next_state
+        
+        total_rewards += episode_reward
+
+    print(f'Average Reward over {episodes} episodes: {total_rewards / episodes}')
 
 
 class TestBusquedas(unittest.TestCase):
@@ -67,6 +121,10 @@ class TestBusquedas(unittest.TestCase):
     #     labels = kmeans.predict(X)
     #     print("Etiquetas de clústeres:", labels)
     #     print("Centroides calculados:", kmeans.centroids)
+
+    def test_q_learning(self):
+        trained_agent = train_agent(episodes=10000)
+        test_agent(trained_agent, episodes=1000)
 
 
 if __name__ == '__main__':
